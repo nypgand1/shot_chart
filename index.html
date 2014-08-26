@@ -30,8 +30,7 @@
     var pavement = d3.svg.line()
         .interpolate("linear")
         .x(function(d) {
-                console.log(d[1]);
-                return xScale(d[0]);
+            return xScale(d[0]);
         })
         .y(function(d) {
             return yScale(d[1]);
@@ -40,20 +39,36 @@
     d3.json("shoppingMall.json", function(error, jsonData) {
         var color1 = d3.scale.category10();
     
-        svg.selectAll("path")
+        svg.selectAll("g")
             .data(jsonData.features)
             .enter()
+            .append("g");
+
+        svg.selectAll("g")
             .append("path")
-            .attr("d", function(d, i) {
-                return pavement(d.geometry.coordinates[0]);
-            })
-            .attr("text", function(d, i) {
-                return "js";
-            })
-            .attr("fill", function(d, i) {
-                return color1(i);
-            });
-    
+                .attr("d", function(d, i) {
+                    return pavement(d.geometry.coordinates[0]);
+                })
+                .attr("text", function(d, i) {
+                    return d.properties.ID + ' ' + d.properties.ShopName;
+                })
+                .attr("fill", function(d, i) {
+                    return color1(i);
+                });
+
+        svg.selectAll("g")
+            .append("text")
+                //.attr("dy", ".3em")
+                .attr("x", function(d) {
+                    return xScale(d.geometry.coordinates[0][0][0]);
+                })
+                .attr("y", function(d) {
+                    return yScale(d.geometry.coordinates[0][0][1]);
+                })
+                //.style("text-anchor", "middle")
+                .text(function(d) {
+                    return d.properties.ID + ' ' + d.properties.ShopName;
+                });
     
     });
     </script>
