@@ -56,18 +56,24 @@
                     return color1(i);
                 });
 
-        svg.selectAll("g")
-            .append("text")
+        svg.selectAll("g").selectAll("text")
+            .data(function(d) {
+                return d.geometry.coordinates[0];
+            })
+            .enter()
+            .append("text");
+
+        svg.selectAll("text")
                 //.attr("dy", ".3em")
                 .attr("x", function(d) {
-                    return xScale(d.geometry.coordinates[0][0][0]);
+                    return xScale(d[0]);
                 })
                 .attr("y", function(d) {
-                    return yScale(d.geometry.coordinates[0][0][1]);
+                    return yScale(d[1]);
                 })
                 //.style("text-anchor", "middle")
                 .text(function(d) {
-                    return d.properties.ID + ' ' + d.properties.ShopName;
+                    return xScale(d[0]);
                 });
     
     });
