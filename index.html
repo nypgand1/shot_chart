@@ -59,7 +59,8 @@
                 })
                 .attr("fill", function(d, i) {
                     return color1(i);
-                });
+                })
+                .attr("fill-opacity", 0.5);
 
         svg.selectAll("g").selectAll("text")
             .data(function(d) {
