@@ -1,24 +1,19 @@
 import json
 
-FILE_NAME_CENTER_8 = './center.json'
+FILE_NAME_INPUT = {'center_8': './zone/center_8.json', 'center_8_16': './zone/center_8_16.json'}
 FILE_NAME_OUTPUT = 'shoppingMall.json'
 
-NUM_POINTS = 64
 
-
-def convertor_to_xy(filename):
+def convert_to_xy(filename):
     
     zone_xy = list()
     
     with open(filename) as f:
         poly = json.load(f)
-    
         xy = poly['xy']
-    
         xy_len = len(xy)
-        step = xy_len / NUM_POINTS
     
-        for i in range(0, xy_len, step):
+        for i in range(0, xy_len, 2):
             print i
             print xy[i]
             print xy[i+1]
@@ -29,14 +24,15 @@ def convertor_to_xy(filename):
     return zone_xy
 
 
-zone_center_8 = dict()
-zone_center_8['geometry'] = {'type': 'Polygon', 'coordinates': [convertor_to_xy(FILE_NAME_CENTER_8)]}
-zone_center_8['properties'] = {"ID": "0", "ShopName": "center_8"}
-
 features = list()
-features.append(zone_center_8)
 
-print json.dumps(zone_center_8, indent=4, separators=(',', ': '))
+for name, filename in FILE_NAME_INPUT.iteritems():
+    zone = dict()
+    zone['geometry'] = {'type': 'Polygon', 'coordinates': [convert_to_xy(filename)]}
+    zone['properties'] = {'ID': len(features), 'ShopName': name}
+    features.append(zone)
+
+    print json.dumps(zone, indent=4, separators=(',', ': '))
 
 
 with open(FILE_NAME_OUTPUT) as f:
