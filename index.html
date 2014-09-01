@@ -3,7 +3,7 @@
     
     <head>
         <meta charset="utf-8">
-        <title>Shopping Mall Messing</title>
+        <title>Shot Chart</title>
         <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
     </head>
     
@@ -41,7 +41,7 @@
             return yScale(d[1]);
         })
     
-    d3.json("shoppingMall.json", function(error, jsonData) {
+    d3.json("shot_chart_zone.json", function(error, jsonData) {
         var color1 = d3.scale.category10();
     
         svg.selectAll("g")
@@ -61,7 +61,7 @@
                     return color1(i);
                 })
                 .attr("fill-opacity", 0.5);
-
+        /*
         svg.selectAll("g").selectAll("text")
             .data(function(d) {
                 return d.geometry.coordinates[0];
@@ -81,7 +81,7 @@
                 .text(function(d) {
                     return xScale(d[0]);
                 });
-    
+        */    
     });
     </script>
     

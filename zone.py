@@ -1,7 +1,7 @@
 import json
 
 FILE_NAME_INPUT = {'center_8': './zone/center_8.json', 'center_8_16': './zone/center_8_16.json'}
-FILE_NAME_OUTPUT = 'shoppingMall.json'
+FILE_NAME_OUTPUT = 'shot_chart_zone.json'
 
 
 def convert_to_xy(filename):
