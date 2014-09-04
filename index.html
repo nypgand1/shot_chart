@@ -3,58 +3,76 @@
     
     <head>
         <meta charset="utf-8">
-        <title>Shopping Mall Messing</title>
+        <title>Shot Chart</title>
         <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+        <script src="saveSvgAsPng.js" charset="utf-8"></script>
     </head>
     
     <body>
-        <div id="map"></div>
+        <div id="shot_chart"></div>
+        <div id="btn">
+            <button onclick="saveSvgAsPng(document.getElementById('shot_chart_svg'), 'shot_char.png', 1);">Click me</button>
+        </div>
     </body>
     
     <script type="text/javascript">
-    var width = 600,
-        height = 300;
-    
-    var svg = d3.select("#map").append("svg")
+
+    var width = 652,
+        height = 613;
+
+    var svg = d3.select("#shot_chart").append("svg")
+        .attr("id", "shot_chart_svg")
         .attr("width", width)
         .attr("height", height);
-    
+
+   
+    var image = svg.append("svg:image")
+        .attr("xlink:href", "shotchart_background_zone_652.png")
+        .attr("width", width)
+        .attr("height", height);
+
     var xScale = d3.scale.linear()
-        .domain([0, 500])
+        .domain([0, 652])
         .range([0, width]);
     
     var yScale = d3.scale.linear()
-        .domain([-200, -500])
-        .range([height, 0]);
+        .domain([0, 613])
+        .range([0, height]);
     
     var pavement = d3.svg.line()
         .interpolate("linear")
         .x(function(d) {
-                console.log(d[1]);
-                return xScale(d[0]);
+            return xScale(d[0]);
         })
         .y(function(d) {
             return yScale(d[1]);
         })
     
-    d3.json("shoppingMall.json", function(error, jsonData) {
+    d3.json("shot_chart_zone.json", function(error, jsonData) {
         var color1 = d3.scale.category10();
-    
-        svg.selectAll("path")
+   
+        svg.selectAll("g")
             .data(jsonData.features)
             .enter()
+            .append("g");
+
+        svg.selectAll("g")
             .append("path")
-            .attr("d", function(d, i) {
-                return pavement(d.geometry.coordinates[0]);
-            })
-            .attr("text", function(d, i) {
-                return "js";
-            })
-            .attr("fill", function(d, i) {
-                return color1(i);
-            });
-    
-    
+                .attr("d", function(d, i) {
+                    return pavement(d.geometry.coordinates);
+                })
+                .attr("fill", function(d, i) {
+                    return color1(i);
+                })
+                .attr("fill-opacity", 0.5);
+        
+        svg.selectAll("g")
+            .append("text")
+                .attr("x", function(d) { return xScale(d.geometry.center[0]); })
+                .attr("y", function(d) { return yScale(d.geometry.center[1]); })
+                .attr("text-anchor", "middle")
+                .text(function(d) { return d.properties.zone_name;} );
+           
     });
     </script>
     
