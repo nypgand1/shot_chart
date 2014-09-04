@@ -23,6 +23,7 @@ FILE_NAME_OUTPUT = 'shot_chart_zone.json'
 def convert_to_xy(filename):
     
     zone_xy = list()
+    center_xy = [0, 0]
     
     with open(filename) as f:
         poly = json.load(f)
@@ -31,16 +32,23 @@ def convert_to_xy(filename):
     
         for i in range(0, xy_len, 2):
             zone_xy.append([xy[i], xy[i+1]])
+            center_xy[0] = center_xy[0] + xy[i]
+            center_xy[1] = center_xy[1] + xy[i+1]
 
-    return zone_xy
+    center_xy[0] = center_xy[0] / (xy_len/2)
+    center_xy[1] = center_xy[1] / (xy_len/2)
+
+    return zone_xy, center_xy
 
 
 features = list()
 
 for name, filename in FILE_NAME_INPUT.iteritems():
+    zone_xy, center_xy = convert_to_xy(filename)
+
     zone = dict()
-    zone['geometry'] = {'type': 'Polygon', 'coordinates': [convert_to_xy(filename)]}
-    zone['properties'] = {'ID': len(features), 'ShopName': name}
+    zone['geometry'] = {'type': 'Polygon', 'coordinates': zone_xy, 'center':center_xy}
+    zone['properties'] = {'ID': len(features), 'zone_name': name}
     features.append(zone)
 
     #print json.dumps(zone, indent=4, separators=(',', ': '))

@@ -59,33 +59,20 @@
         svg.selectAll("g")
             .append("path")
                 .attr("d", function(d, i) {
-                    return pavement(d.geometry.coordinates[0]);
+                    return pavement(d.geometry.coordinates);
                 })
                 .attr("fill", function(d, i) {
                     return color1(i);
                 })
                 .attr("fill-opacity", 0.5);
-        /*
-        svg.selectAll("g").selectAll("text")
-            .data(function(d) {
-                return d.geometry.coordinates[0];
-            })
-            .enter()
-            .append("text");
-
-        svg.selectAll("text")
-                //.attr("dy", ".3em")
-                .attr("x", function(d) {
-                    return xScale(d[0]);
-                })
-                .attr("y", function(d) {
-                    return yScale(d[1]);
-                })
-                //.style("text-anchor", "middle")
-                .text(function(d) {
-                    return xScale(d[0]);
-                });
-        */    
+        
+        svg.selectAll("g")
+            .append("text")
+                .attr("x", function(d) { return xScale(d.geometry.center[0]); })
+                .attr("y", function(d) { return yScale(d.geometry.center[1]); })
+                .attr("text-anchor", "middle")
+                .text(function(d) { return d.properties.zone_name;} );
+           
     });
     </script>
     
