@@ -5,13 +5,16 @@
         <meta charset="utf-8">
         <title>Shot Chart</title>
         <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-        <script src="saveSvgAsPng.js" charset="utf-8"></script>
+        <script src="svgToPng.js" charset="utf-8"></script>
     </head>
     
     <body>
         <div id="shot_chart"></div>
-        <div id="btn">
-            <button onclick="saveSvgAsPng(document.getElementById('shot_chart_svg'), 'shot_char.png', 1);">Click me</button>
+        <div id="svg_container"></div>
+        <div id="png_container"></div>
+
+        <div>
+            <button id="btn_save">save</button>
         </div>
     </body>
     
@@ -24,8 +27,7 @@
         .attr("id", "shot_chart_svg")
         .attr("width", width)
         .attr("height", height);
-
-   
+ 
     var image = svg.append("svg:image")
         .attr("xlink:href", "shotchart_background_zone_652.png")
         .attr("width", width)
@@ -68,11 +70,57 @@
         
         svg.selectAll("g")
             .append("text")
-                .attr("x", function(d) { return xScale(d.geometry.center[0]); })
-                .attr("y", function(d) { return yScale(d.geometry.center[1]); })
+                .attr("class", "perc")
+                .attr("x", function(d) { 
+                    return xScale(d.geometry.center[0]); 
+                 })
+                .attr("y", function(d) { 
+                    return yScale(d.geometry.center[1]); 
+                })
+                .attr("fill", function(d, i) {
+                    return color1(i+1);
+                })
+                .attr("style", "font-size: 12px;")
                 .attr("text-anchor", "middle")
                 .text(function(d) { return d.properties.zone_name;} );
            
+    });
+
+    d3.select("#btn_save").on("click", function() {
+        // inline <image> in <svg> first
+        inlineImages( function() { 
+            var parentNode = document.createElement("div");
+            var cloneNode = document.getElementById("shot_chart_svg")
+                .cloneNode(true);
+
+            var xmlns = "http://www.w3.org/2000/xmlns/";
+            cloneNode.setAttribute("version", "1.1");
+            cloneNode.setAttributeNS(xmlns, "xmlns", "http://www.w3.org/2000/svg");
+            cloneNode.setAttributeNS(xmlns, "xmlns:xlink", "http://www.w3.org/1999/xlink");
+
+
+            var css = styles(cloneNode);
+            if(css != null)
+                cloneNode.insertBefore(css, cloneNode.firstChild);
+
+            parentNode.appendChild(cloneNode)
+            var html = parentNode.innerHTML;
+            var svgEncode = window.btoa(unescape(encodeURIComponent(html)));
+
+            var svgSrc = 'data:image/svg+xml;base64,'+ svgEncode;
+            var svgImg = '<img src="'+svgSrc+'">'; 
+            d3.select("#svg_container").html(svgImg);
+
+            svgSrcToPngSrc(svgSrc, function(pngSrc) {
+                var pngImg = '<img src="'+pngSrc+'">';
+                d3.select("#png_container").html(pngImg);
+
+                var a = document.createElement('a');
+                a.download = "shot_chart.png";
+                a.href = pngSrc;
+                a.click();
+            });
+        });
     });
     </script>
     
