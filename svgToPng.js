@@ -3,6 +3,10 @@
         var sheets = document.styleSheets;
         for (var i = 0; i < sheets.length; i++) {
             var rules = sheets[i].cssRules;
+            
+            if (rules == null)
+                return null;
+
             for (var j = 0; j < rules.length; j++) {
                 var rule = rules[j];
                 if (typeof(rule.style) != "undefined") {

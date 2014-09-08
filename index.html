@@ -97,7 +97,11 @@
             cloneNode.setAttribute("version", "1.1");
             cloneNode.setAttributeNS(xmlns, "xmlns", "http://www.w3.org/2000/svg");
             cloneNode.setAttributeNS(xmlns, "xmlns:xlink", "http://www.w3.org/1999/xlink");
-            cloneNode.insertBefore(styles(cloneNode), cloneNode.firstChild);
+
+
+            var css = styles(cloneNode);
+            if(css != null)
+                cloneNode.insertBefore(css, cloneNode.firstChild);
 
             parentNode.appendChild(cloneNode)
             var html = parentNode.innerHTML;
