@@ -20,6 +20,9 @@
     
     <script type="text/javascript">
 
+    var fgm = [1, 2, 1, 4, 5, 6, 7, 8, 9, 5, 11, 6, 13, 7];
+    var fga = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+
     var width = 652,
         height = 613;
 
@@ -86,6 +89,9 @@
 
         svg.selectAll("g")
             .append("text")
+                .attr("id", function(d) { 
+                    return d.properties.zone_name;
+                })
                 .attr("x", function(d) { 
                     return xScale(d.geometry.center[0]); 
                 })
@@ -95,7 +101,9 @@
                 .attr("style", "font-size: 15px;")
                 .attr("fill", "white")
                 .attr("text-anchor", "middle")
-                .text(function(d) { return d.properties.zone_name;} );
+                .text( function(d, i) {
+                    return (fgm[i] + ' / ' + fga[i] + ' ' + (100*fgm[i]/fga[i]).toFixed(1) + '%'); 
+                });
 
     });
 
