@@ -1,21 +1,22 @@
 import json
 
-FILE_NAME_INPUT = dict()
-FILE_NAME_INPUT['center_08'] = './zone/center_08.json'
-FILE_NAME_INPUT['center_08_16'] = './zone/center_08_16.json'
-FILE_NAME_INPUT['center_16_24'] = './zone/center_16_24.json'
-FILE_NAME_INPUT['center_24'] = './zone/center_24.json'
-FILE_NAME_INPUT['left_08_16'] = './zone/left_08_16.json'
-FILE_NAME_INPUT['left_16_24'] = './zone/left_16_24.json'
-FILE_NAME_INPUT['left_24'] = './zone/left_24.json'
-FILE_NAME_INPUT['left_center_16_24'] = './zone/left_center_16_24.json'
-FILE_NAME_INPUT['left_center_24'] = './zone/left_center_24.json'
-FILE_NAME_INPUT['right_08_16'] = './zone/right_08_16.json'
-FILE_NAME_INPUT['right_16_24'] = './zone/right_16_24.json'
-FILE_NAME_INPUT['right_24'] = './zone/right_24.json'
-FILE_NAME_INPUT['right_center_16_24'] = './zone/right_center_16_24.json'
-FILE_NAME_INPUT['right_center_24'] = './zone/right_center_24.json'
+FILE_NAME_INPUT = list()
+FILE_NAME_INPUT.append('./zone/center_08.json')
 
+FILE_NAME_INPUT.append('./zone/center_08_16.json')
+FILE_NAME_INPUT.append('./zone/left_08_16.json')
+FILE_NAME_INPUT.append('./zone/right_08_16.json')
+FILE_NAME_INPUT.append('./zone/center_16_24.json')
+FILE_NAME_INPUT.append('./zone/left_16_24.json')
+FILE_NAME_INPUT.append('./zone/right_16_24.json')
+FILE_NAME_INPUT.append('./zone/left_center_16_24.json')
+FILE_NAME_INPUT.append('./zone/right_center_16_24.json')
+
+FILE_NAME_INPUT.append('./zone/center_24.json')
+FILE_NAME_INPUT.append('./zone/left_24.json')
+FILE_NAME_INPUT.append('./zone/right_24.json')
+FILE_NAME_INPUT.append('./zone/left_center_24.json')
+FILE_NAME_INPUT.append('./zone/right_center_24.json')
 
 FILE_NAME_OUTPUT = 'shot_chart_zone.json'
 
@@ -43,12 +44,12 @@ def convert_to_xy(filename):
 
 features = list()
 
-for name, filename in FILE_NAME_INPUT.iteritems():
+for filename in FILE_NAME_INPUT:
     zone_xy, center_xy = convert_to_xy(filename)
 
     zone = dict()
     zone['geometry'] = {'type': 'Polygon', 'coordinates': zone_xy, 'center':center_xy}
-    zone['properties'] = {'ID': len(features), 'zone_name': name}
+    zone['properties'] = {'ID': len(features), 'zone_name': filename}
     features.append(zone)
 
     #print json.dumps(zone, indent=4, separators=(',', ': '))

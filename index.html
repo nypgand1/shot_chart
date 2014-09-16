@@ -20,8 +20,46 @@
     
     <script type="text/javascript">
 
+    var fgm = [0, 2, 2, 1.6, 2, 2, 4, 8, 2, 2, 11, 3, 1, 7];
+    var fga = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+
     var width = 652,
         height = 613;
+
+    var xScale = d3.scale.linear()
+        .domain([0, 652])
+        .range([0, width]);
+    
+    var yScale = d3.scale.linear()
+        .domain([0, 613])
+        .range([0, height]);
+    
+    var fontSize = Math.min(xScale(16), yScale(16));
+
+    function percRed(i) {
+        if(i >= 4 && i <= 8) // long two
+            return 0.4;
+        else if(i >= 1 && i <= 3) // mid two
+            return 0.5;
+        else if(i >= 9 && i <= 13) // three
+            return 0.35;
+        else // under the hoop
+            return 0.6;
+    }
+
+    function fillZoneColor(i) {
+        var perc = fgm[i]/fga[i];
+
+        var percR = percRed(i);
+        var percY = percR - 0.1;
+
+        if(perc < percY) // blue
+            return "#88b8f6";
+        else if (perc < percR) // yellow
+            return "#eadead";
+        else // red
+            return "#e5786d";
+    }
 
     var svg = d3.select("#shot_chart").append("svg")
         .attr("id", "shot_chart_svg")
@@ -33,14 +71,6 @@
         .attr("width", width)
         .attr("height", height);
 
-    var xScale = d3.scale.linear()
-        .domain([0, 652])
-        .range([0, width]);
-    
-    var yScale = d3.scale.linear()
-        .domain([0, 613])
-        .range([0, height]);
-    
     var pavement = d3.svg.line()
         .interpolate("linear")
         .x(function(d) {
@@ -56,7 +86,16 @@
         svg.selectAll("g")
             .data(jsonData.features)
             .enter()
-            .append("g");
+            .append("g")
+                .attr("fill-opacity", 0.5)
+                .on("mouseover", function() {
+                    console.log(this);
+                    d3.select(this).attr("fill-opacity", 0.8);
+                })
+                .on("mouseout", function() {
+                    console.log(this);
+                    d3.select(this).attr("fill-opacity", 0.5);
+                });
 
         svg.selectAll("g")
             .append("path")
@@ -64,26 +103,70 @@
                     return pavement(d.geometry.coordinates);
                 })
                 .attr("fill", function(d, i) {
-                    return color1(i);
-                })
-                .attr("fill-opacity", 0.5);
+                    //return color1(i);
+                    return fillZoneColor(i);
+                });
         
         svg.selectAll("g")
+            .append("rect")
+                .attr("x", function(d) { 
+                    return (xScale(d.geometry.center[0]-40)); 
+                 })
+                .attr("y", function(d) { 
+                    return (yScale(d.geometry.center[1]-25)); 
+                })
+                .attr("rx", function() {
+                    return xScale(10);
+                 })
+                .attr("ry", function() {
+                    return yScale(50);
+                 })
+                .attr("width", function() {
+                    return xScale(80);
+                 })
+                .attr("height", function() {
+                    return yScale(50);
+                 })
+                .attr("fill", "black")
+                .attr("style", "stroke: grey; stroke-width: 1px");
+
+        svg.selectAll("g")
             .append("text")
-                .attr("class", "perc")
+                .attr("id", function(d) { 
+                    return d.properties.zone_name;
+                })
+                .attr("class", "fg")
                 .attr("x", function(d) { 
                     return xScale(d.geometry.center[0]); 
-                 })
+                })
                 .attr("y", function(d) { 
                     return yScale(d.geometry.center[1]); 
                 })
-                .attr("fill", function(d, i) {
-                    return color1(i+1);
+                .attr("style", "font:" + fontSize + "px sans-serif;")
+                .attr("fill", "white")
+                .attr("fill-opacity", 1.0)
+                .attr("text-anchor", "middle");
+
+        svg.selectAll("text")
+            .append("tspan")
+                .attr("x", function(d) { 
+                    return xScale(d.geometry.center[0]); 
                 })
-                .attr("style", "font-size: 12px;")
-                .attr("text-anchor", "middle")
-                .text(function(d) { return d.properties.zone_name;} );
-           
+                .attr("dy", "-0.2em")
+                .text( function(d, i) {
+                    return ( fgm[i] + ' / ' + fga[i] ); 
+                });
+
+        svg.selectAll("text")
+            .append("tspan")
+                .attr("x", function(d) { 
+                    return xScale(d.geometry.center[0]); 
+                })
+                .attr("dy", "1em")
+                .text( function(d, i) {
+                    return ( (100*fgm[i]/fga[i]).toFixed(1) + '%' ); 
+                });
+
     });
 
     d3.select("#btn_save").on("click", function() {
