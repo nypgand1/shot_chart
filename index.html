@@ -74,15 +74,23 @@
         svg.selectAll("g")
             .append("rect")
                 .attr("x", function(d) { 
-                    return (xScale(d.geometry.center[0])-60); 
+                    return (xScale(d.geometry.center[0]-40)); 
                  })
                 .attr("y", function(d) { 
-                    return (yScale(d.geometry.center[1])-30); 
+                    return (yScale(d.geometry.center[1]-25)); 
                 })
-                .attr("rx", 10)
-                .attr("ry", 10)
-                .attr("width", 120)
-                .attr("height", 60)
+                .attr("rx", function() {
+                    return xScale(10);
+                 })
+                .attr("ry", function() {
+                    return yScale(50);
+                 })
+                .attr("width", function() {
+                    return xScale(80);
+                 })
+                .attr("height", function() {
+                    return yScale(50);
+                 })
                 .attr("fill", "black")
                 .attr("fill-opacity", 0.5)
                 .attr("style", "stroke: grey; stroke-width: 1px");
@@ -98,11 +106,28 @@
                 .attr("y", function(d) { 
                     return yScale(d.geometry.center[1]); 
                 })
-                .attr("style", "font-size: 15px;")
+                .attr("style", "font-size: 1em;")
                 .attr("fill", "white")
-                .attr("text-anchor", "middle")
+                .attr("text-anchor", "middle");
+
+        svg.selectAll("text")
+            .append("tspan")
+                .attr("x", function(d) { 
+                    return xScale(d.geometry.center[0]); 
+                })
+                .attr("dy", "-0.2em")
                 .text( function(d, i) {
-                    return (fgm[i] + ' / ' + fga[i] + ' ' + (100*fgm[i]/fga[i]).toFixed(1) + '%'); 
+                    return ( fgm[i] + ' / ' + fga[i] ); 
+                });
+
+        svg.selectAll("text")
+            .append("tspan")
+                .attr("x", function(d) { 
+                    return xScale(d.geometry.center[0]); 
+                })
+                .attr("dy", "1em")
+                .text( function(d, i) {
+                    return ( (100*fgm[i]/fga[i]).toFixed(1) + '%' ); 
                 });
 
     });
