@@ -61,7 +61,16 @@
         svg.selectAll("g")
             .data(jsonData.features)
             .enter()
-            .append("g");
+            .append("g")
+                .attr("fill-opacity", 0.5)
+                .on("mouseover", function() {
+                    console.log(this);
+                    d3.select(this).attr("fill-opacity", 0.8);
+                })
+                .on("mouseout", function() {
+                    console.log(this);
+                    d3.select(this).attr("fill-opacity", 0.5);
+                });
 
         svg.selectAll("g")
             .append("path")
@@ -70,8 +79,7 @@
                 })
                 .attr("fill", function(d, i) {
                     return color1(i);
-                })
-                .attr("fill-opacity", 0.5);
+                });
         
         svg.selectAll("g")
             .append("rect")
@@ -94,7 +102,6 @@
                     return yScale(50);
                  })
                 .attr("fill", "black")
-                .attr("fill-opacity", 0.5)
                 .attr("style", "stroke: grey; stroke-width: 1px");
 
         svg.selectAll("g")
@@ -111,6 +118,7 @@
                 })
                 .attr("style", "font-size:" + font_size + "px")
                 .attr("fill", "white")
+                .attr("fill-opacity", 1.0)
                 .attr("text-anchor", "middle");
 
         svg.selectAll("text")
