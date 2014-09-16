@@ -2,20 +2,21 @@ import json
 
 FILE_NAME_INPUT = list()
 FILE_NAME_INPUT.append('./zone/center_08.json')
-FILE_NAME_INPUT.append('./zone/center_08_16.json')
-FILE_NAME_INPUT.append('./zone/center_16_24.json')
-FILE_NAME_INPUT.append('./zone/center_24.json')
-FILE_NAME_INPUT.append('./zone/left_08_16.json')
-FILE_NAME_INPUT.append('./zone/left_16_24.json')
-FILE_NAME_INPUT.append('./zone/left_24.json')
-FILE_NAME_INPUT.append('./zone/left_center_16_24.json')
-FILE_NAME_INPUT.append('./zone/left_center_24.json')
-FILE_NAME_INPUT.append('./zone/right_08_16.json')
-FILE_NAME_INPUT.append('./zone/right_16_24.json')
-FILE_NAME_INPUT.append('./zone/right_24.json')
-FILE_NAME_INPUT.append('./zone/right_center_16_24.json')
-FILE_NAME_INPUT.append('./zone/right_center_24.json')
 
+FILE_NAME_INPUT.append('./zone/center_08_16.json')
+FILE_NAME_INPUT.append('./zone/left_08_16.json')
+FILE_NAME_INPUT.append('./zone/right_08_16.json')
+FILE_NAME_INPUT.append('./zone/center_16_24.json')
+FILE_NAME_INPUT.append('./zone/left_16_24.json')
+FILE_NAME_INPUT.append('./zone/right_16_24.json')
+FILE_NAME_INPUT.append('./zone/left_center_16_24.json')
+FILE_NAME_INPUT.append('./zone/right_center_16_24.json')
+
+FILE_NAME_INPUT.append('./zone/center_24.json')
+FILE_NAME_INPUT.append('./zone/left_24.json')
+FILE_NAME_INPUT.append('./zone/right_24.json')
+FILE_NAME_INPUT.append('./zone/left_center_24.json')
+FILE_NAME_INPUT.append('./zone/right_center_24.json')
 
 FILE_NAME_OUTPUT = 'shot_chart_zone.json'
 
